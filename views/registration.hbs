@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Registration Form</title>
+
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+        }
+        
+        .container1 {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* Basic table styling */
+        table {
+        border-collapse: collapse;
+        width: 100%;
+        }
+
+        /* Table header styles */
+        thead th {
+        background-color: #f2f2f2;
+        border: 1px solid #dddddd;
+        padding: 8px;
+        text-align: left;
+        }
+
+        /* Table body styles */
+        tbody td {
+        border: 1px solid #dddddd;
+        padding: 8px;
+        }
+
+        /* Alternating row colors for better readability */
+        tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+        }
+</style>
+
+<style>
+    /* Add styles for Update and Delete buttons */
+    .btn {
+        padding: 8px 16px;
+        font-size: 14px;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        color: #fff;
+        transition: background-color 0.3s, opacity 0.3s;
+    }
+
+    /* Style for Update button */
+    .registration-btn {
+        background-color: #F2BB66;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+
+    /* Style for Update button */
+    .update-btn {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+
+    /* Style for Delete button */
+    .delete-btn {
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 16px;
+        margin-top: 10px;
+        margin-left: 5px;
+    }
+
+    /* Hover effect for buttons */
+    .btn:hover {
+        opacity: 0.8;
+    }
+</style>
+
+<style>
+    /* Style for Save Changes button inside the update modal */
+    #save_changes_btn {
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+
+    /* Hover effect for the Save Changes button */
+    #save_changes_btn:hover {
+        opacity: 0.8;
+    }
+
+    /* Modal styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 50%;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+
+<style>
+    /* Add styles for the beautiful heading "</> USERS" */
+    .users-heading1 {
+        font-size: 36px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 30px;
+        border: 5px solid #4CAF50; /* Add border with color #ccc */
+        padding: 10px; /* Add padding to create space between the border and content */
+    }
+
+    .users-symbol {
+        font-size: 40px;
+        color: #F2BB66; /* Set the color to green (#4CAF50) */
+    }
+</style>
+
+<style>
+    /* Add styles for the beautiful heading "</> USERS" */
+    .users-heading2 {
+        font-size: 36px;
+        font-weight: bold;
+        text-align: left;
+        margin-bottom: 30px;
+        border: 5px solid #4CAF50; /* Add border with color #ccc */
+        padding: 10px; /* Add padding to create space between the border and content */
+    }
+</style>
+
+</head>
+
+<body>
+    <div class="users-heading1">
+    Sample Website
+    <span class="users-symbol">&lt;/&gt;</span>
+    </div>
+
+    <div class="users-heading2">
+        <td>
+        <button type="button" id="registration_id" class="registration-btn">Register</button>
+        <button type="button" id="cont_id" class="registration-btn">Contact Us</button>
+        <button type="button" id="about_id" class="registration-btn">About Us</button>
+        <button type="button" id="_id" class="registration-btn">Products</button>
+        </td>
+    </div>
+
+    {{!
+    1 One registration button on top of the screen
+    2 Login form (already a user sign in -----password checking....)
+    3 HASH and SALT in NODE MODULES for PASSWORD----------------------------------------------------START OF CREATE PART-----------------------------------------------------------}}
+
+    {{!-- modal ? dailouge box insert the form inside the modal --}}
+        {{!-- we can show data using table --}}
+        {{!-- action create a action botton inside the ____ for each update delete -for each- funtion there will be a onlick --}}
+
+    <div class="container1">
+        <div id="registration_modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Registration Form</h2>
+                <form id="registration_form">
+                    <div class="form-group">
+                        <label for="firstname">First Name:</label>
+                        <input type="text" id="firstname" name="firstname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastname">Last Name:</label>
+                        <input type="text" id="lastname" name="lastname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneno">Phone Number:</label>
+                        <input type="tel" id="contno" name="contno" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" id="register_btn" class="btn btn-primary">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container2">
+        <table>
+            <tr>
+                <th>firstname</th>
+                <th>lastname</th>
+                <th>email</th>
+                <th>phn</th>
+                <th>username</th>
+                <th>password</th>
+                <th>actions</th>
+            </tr>
+            {{#each users}}
+            <tr>
+                <td>{{this.firstname}}</td>
+                <td>{{this.lastname}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.contno}}</td>
+                <td>{{this.username}}</td>
+                <td>{{this.password}}</td>
+                <td>
+                    <button type="button" id="delete_id" class="delete-btn" data-id="{{this.id}}">Delete</button>
+                    <button type="button" id="update_id" class="update-btn" data-id="{{this.id}}">Update</button>
+                </td>
+            </tr>
+            {{/each}}
+        </table>
+    </div>
+
+    <!--///////////////////////////////////////////////////Modal for Update Form///////////////////////////////////////////////////// -->
+<div id="update_modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Update User</h2>
+        <form id="update_form">
+            <input type="hidden" id="up_id" name="id">
+            <div class="form-group">
+                <label for="update_firstname">First Name:</label>
+                <input type="text" id="update_firstname" name="firstname" required>
+            </div>
+            <div class="form-group">
+                <label for="update_lastname">Last Name:</label>
+                <input type="text" id="update_lastname" name="lastname" required>
+            </div>
+            <div class="form-group">
+                <label for="update_email">Email:</label>
+                <input type="email" id="update_email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="update_contno">Phone Number:</label>
+                <input type="tel" id="update_contno" name="contno" required>
+            </div>
+            <div class="form-group">
+                <label for="update_username">Username:</label>
+                <input type="text" id="update_username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="update_password">Password:</label>
+                <input type="password" id="update_password" name="password" required>
+            </div>
+            <button type="submit" id="save_changes_btn" class="btn btn-primary">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+
+
+    {{!-- //----------------------------------------------------SCRIPT---------------------------------------------------------------------}}
+
+    
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+
+
+
+
+    <script>
+        //---------------------------------------------------REGISTRATION--------------------------------------------------------//
+        $(document).on('click', '#registration_id', function() {
+        $("#registration_modal").show();
+    });
+
+    
+    $(".close").on("click", function() {
+        $("#registration_modal").hide();
+    });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $("#registration_form").validate({
+                rules: {
+                    firstname: {
+                        required: true
+                    },
+                    lastname: {
+                        required: true
+                    },
+                    email: {
+                        required: true
+                    },
+                    contno: {
+                        required: true
+                    },
+                    username: {
+                        required: true
+                    },
+                    password: {
+                        required: true
+                    },
+                },
+                submitHandler: function(form) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/post",
+                            data: $("#registration_form").serialize(),
+                            success: function(response) {
+                                if(response.code === 200){
+                                    alert("Form submitted . . .");
+                                    window.location.reload();
+                                }
+                                else{
+                                    alert(response.message);
+                                    window.location.reload();
+                                }
+                            }
+                        })
+                    }
+            });
+        });
+    </script>
+
+    <script>
+
+
+
+    //---------------------------------------------DELETE-----------------------------//
+ 
+    $(document).on('click', '#delete_id', function() {
+        const id = $(this).data('id');
+       
+        $.ajax({
+            type: "POST",
+            url: "/postdelete", 
+            data: { id: id },
+            success: function(response) {
+                alert(response.message);
+                window.location.reload();    
+            },
+            error: function() {
+                alert("An error occurred while deleting the user.");
+            }
+        });
+    });
+
+
+
+
+
+
+
+//------------------------------------------UPDATE-------------------------------------//
+    
+    $(document).on('click', '#update_id', function() {
+        const id = $(this).data('id');
+        $("#update_modal").show();
+        $("#up_id").val(id);
+        //console.log($("#up_id").val());
+        $.ajax({
+            type:"POST",
+            url:"/view-details",
+            data:{id},
+            success:function(response){
+                //const a = (response.showdata.createdAt)//
+                const firstname = response.showdata.firstname//
+                $("#update_firstname").val(firstname);
+
+                const lastname = response.showdata.lastname
+                $("#update_lastname").val(lastname);
+
+                const email = response.showdata.email
+                $("#update_email").val(email);
+
+                const contno = response.showdata.contno
+                $("#update_contno").val(contno);
+
+                const username = response.showdata.username
+                $("#update_username").val(username);
+
+                const password = response.showdata.password
+                $("#update_password").val(password);
+
+                //console.log(a); //
+            }
+        })
+        //console.log(a); //
+    });
+
+    
+    $(".close").on("click", function() {
+        $("#update_modal").hide();
+    });
+    
+    
+
+    $(document).ready(function() {
+            $("#update_form").validate({
+                rules: {
+                    id:{
+                        required: true
+                    },
+                    firstname: {
+                        required: true
+                    },
+                    lastname: {
+                        required: true
+                    },
+                    email: {
+                        required: true
+                    },
+                    contno: {
+                        required: true
+                    },
+                    username: {
+                        required: true
+                    },
+                    password: {
+                        required: true
+                    },
+                },
+                submitHandler: function(form) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/postupdate",
+                            data: $("#update_form").serialize(),
+                            success: function() {
+                                alert("form submitted sucessfully");
+                                window.location.reload();
+                            }
+                        })
+                    }
+            });
+        });
+</script>
+</body>
+</html>

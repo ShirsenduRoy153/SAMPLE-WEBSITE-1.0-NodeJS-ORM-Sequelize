@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Form</title>
+<style>
+#login {
+max-width: 400px;
+margin: 0 auto;
+padding: 20px;
+background-color: #f8f8f8;
+border-radius: 5px;
+box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+#login h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+#login_btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#login_btn:hover {
+    background-color: #0056b3;
+}
+
+</style>
+<style>
+    /* Add styles for the beautiful heading "</> USERS" */
+    .users-heading {
+        font-size: 36px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 30px;
+        border: 5px solid #4CAF50; /* Add border with color #ccc */
+        padding: 10px; /* Add padding to create space between the border and content */
+    }
+
+    .users-symbol {
+        font-size: 40px;
+        color: #4CAF50; /* Set the color to green (#4CAF50) */
+    }
+</style>
+</head>
+<body>
+
+    <div class="users-heading">
+    Sample Website
+    <span class="users-symbol">&lt;/&gt;</span>
+    </div>
+
+    <div id="login">
+    <h2>Log in</h2>
+    <form id="login_form">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" id="login_btn" class="btn btn-primary">log in</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+
+<script>
+        $(document).ready(function() {
+            $("#login_form").validate({
+                rules: {
+                    username: {
+                        required: true
+                    },
+                    password: {
+                        required: true
+                    },
+                },
+                submitHandler: function(form) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/loginpost",
+                            data: $("#login_form").serialize(),
+                            success: function(response) {
+                                if(response.code === 200){
+                                    window.location.href="http://localhost:5000/registrations"
+                                }
+                                else{
+                                    alert(response.message);
+                                    window.location.reload();
+                                }
+                            }
+                        })
+                    }
+            });
+        });
+    </script>
+</body>
+</html>
