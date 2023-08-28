@@ -17,6 +17,19 @@
             border: 1px solid #ccc;
             background-color: #fff;
         }
+
+        .container2 {
+            max-width: 1650px;
+            margin: 20px 0 20px 20px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+
+        #profileimage {
+            padding: 20px;
+        }
+
         
         .form-group {
             margin-bottom: 20px;
@@ -129,6 +142,18 @@
         margin-left: 5px;
     }
 
+    .addedu-btn {
+        background-color: #FFA500;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 16px;
+        margin-top: 10px;
+        margin-left: 5px;
+    }
+
     /* Hover effect for buttons */
     .btn:hover {
         opacity: 0.8;
@@ -187,6 +212,20 @@
         text-decoration: none;
         cursor: pointer;
     }
+
+    .uploadclose {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .uploadclose:hover,
+    .uploadclose:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
 </style>
 
 <style>
@@ -218,6 +257,33 @@
     }
 </style>
 
+<style>
+    label.error {
+        color: red;
+    }
+</style>
+
+<style>
+    
+    #strength {
+        font-weight: bold;
+    }
+
+
+    .weak {
+        color: red;
+    }
+
+    .medium {
+        color: orange;
+    }
+
+    .strong {
+        color: green;
+    }
+
+</style>
+
 </head>
 
 <body>
@@ -231,48 +297,46 @@
         <button type="button" id="registration_id" class="registration-btn">Register</button>
         <button type="button" id="cont_id" class="registration-btn">Contact Us</button>
         <button type="button" id="about_id" class="registration-btn">About Us</button>
-        <button type="button" id="_id" class="registration-btn">Products</button>
+        <button type="button" id="product_id" class="registration-btn">Products</button>
         </td>
     </div>
 
-    {{!
-    1 One registration button on top of the screen
-    2 Login form (already a user sign in -----password checking....)
-    3 HASH and SALT in NODE MODULES for PASSWORD----------------------------------------------------START OF CREATE PART-----------------------------------------------------------}}
-
-    {{!-- modal ? dailouge box insert the form inside the modal --}}
-        {{!-- we can show data using table --}}
-        {{!-- action create a action botton inside the ____ for each update delete -for each- funtion there will be a onlick --}}
+{{!----------------------------------------------REGISTRATION MODAL-----------------------------------------------}}
 
     <div class="container1">
         <div id="registration_modal" class="modal" style="display: none;">
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <h2>Registration Form</h2>
-                <form id="registration_form">
+                <form id="registration_form" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="firstname">First Name:</label>
-                        <input type="text" id="firstname" name="firstname" required>
+                        <input type="text" id="firstname" name="firstname">
                     </div>
                     <div class="form-group">
                         <label for="lastname">Last Name:</label>
-                        <input type="text" id="lastname" name="lastname" required>
+                        <input type="text" id="lastname" name="lastname">
                     </div>
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required>
+                        <input type="email" id="email" name="email">
                     </div>
                     <div class="form-group">
                         <label for="phoneno">Phone Number:</label>
-                        <input type="tel" id="contno" name="contno" required>
+                        <input type="text" id="contno" name="contno">
                     </div>
                     <div class="form-group">
                         <label for="username">Username:</label>
-                        <input type="text" id="username" name="username" required>
+                        <input type="text" id="username" name="username">
                     </div>
                     <div class="form-group">
                         <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" required>
+                        <input type="password" id="password" name="password">
+                        <p id="message">your Password is<span id="strength"></span></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="cv">Upload CV:</label>
+                        <input type="file" id="cv" name="cv">
                     </div>
                     <button type="submit" id="register_btn" class="btn btn-primary">Register</button>
                 </form>
@@ -281,6 +345,7 @@
     </div>
 
 
+{{!------------------------------------------TABLE-------------------------------------------------}}
     <div class="container2">
         <table>
             <tr>
@@ -303,13 +368,14 @@
                 <td>
                     <button type="button" id="delete_id" class="delete-btn" data-id="{{this.id}}">Delete</button>
                     <button type="button" id="update_id" class="update-btn" data-id="{{this.id}}">Update</button>
+                    <button type="button" id="addedu_id" class="addedu-btn" data-id="{{this.id}}">Add EDU.</button>
                 </td>
             </tr>
             {{/each}}
         </table>
     </div>
 
-    <!--///////////////////////////////////////////////////Modal for Update Form///////////////////////////////////////////////////// -->
+{{!---------------------------------------------------------UPDATE MODAL-------------------------------------------------}}
 <div id="update_modal" class="modal" style="display: none;">
     <div class="modal-content">
         <span class="close">&times;</span>
@@ -318,23 +384,23 @@
             <input type="hidden" id="up_id" name="id">
             <div class="form-group">
                 <label for="update_firstname">First Name:</label>
-                <input type="text" id="update_firstname" name="firstname" required>
+                <input type="text" id="update_firstname" name="firstname">
             </div>
             <div class="form-group">
                 <label for="update_lastname">Last Name:</label>
-                <input type="text" id="update_lastname" name="lastname" required>
+                <input type="text" id="update_lastname" name="lastname">
             </div>
             <div class="form-group">
                 <label for="update_email">Email:</label>
-                <input type="email" id="update_email" name="email" required>
+                <input type="email" id="update_email" name="email">
             </div>
             <div class="form-group">
                 <label for="update_contno">Phone Number:</label>
-                <input type="tel" id="update_contno" name="contno" required>
+                <input type="text" id="update_contno" name="contno">
             </div>
             <div class="form-group">
                 <label for="update_username">Username:</label>
-                <input type="text" id="update_username" name="username" required>
+                <input type="text" id="update_username" name="username">
             </div>
             <div class="form-group">
                 <label for="update_password">Password:</label>
@@ -347,12 +413,80 @@
 
 
 
+
+{{!---------------------------------------------------------ADD EDu. MODAL-------------------------------------------------}}
+<div id="addedu_modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Add Education</h2>
+        <form id="addedu_form" >
+            <input type="hidden" id="addedu_id" name="addedu_id">
+            <div class="education-section">
+                <label for="university">University Name:</label>
+                <input type="text" name="universityname" id="universityname"><br><br>
+                
+                <label for="degree">Degree:</label>
+                <select name="degreename" id="degreename" required>
+                    <option value="Bachelor's">Bachelor's</option>
+                    <option value="Master's">Master's</option>
+                    <option value="Ph.D.">Ph.D.</option>
+                    <option value="Associate's">Associate's</option>
+                    <option value="Diploma">Diploma</option>
+                </select><br><br>
+                
+                {{!-- <label for="degreeName">Degree Name:</label>
+                <input type="text" name="degree" id="deegree"><br><br> --}}
+                
+                <label for="year">Year:</label>
+                <input type="tel" name="year" id="year"><br><br>
+            </div>
+            <div class="form-group">
+                <label for="addedu">Upload Degree:</label>
+                <input type="file" id="addedu" name="addedu">
+            </div>
+            <button type="submit" id="addedu_btn" class="btn btn-primary">Upload</button>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     {{!-- //----------------------------------------------------SCRIPT---------------------------------------------------------------------}}
 
     
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -369,54 +503,155 @@
     });
     </script>
 
+    {{!-- <script src="C:/Users/User/Desktop/orm_new/views/test.js"></script> --}}
+
     <script>
+            document.addEventListener("DOMContentLoaded", function () {
+            const passwordInput = document.getElementById("password");
+            const strengthIndicator = document.getElementById("strength");
+
+            passwordInput.addEventListener("input", function () {
+                const password = passwordInput.value;
+                const strength = calculatePasswordStrength(password);
+
+                strengthIndicator.classList.remove("weak", "medium", "strong");
+
+                if (strength === "weak") {
+                    strengthIndicator.classList.add("weak");
+                    strengthIndicator.textContent = " Weak";
+                } else if (strength === "medium") {
+                    strengthIndicator.classList.add("medium");
+                    strengthIndicator.textContent = " Medium";
+                } else if (strength === "strong") {
+                    strengthIndicator.classList.add("strong");
+                    strengthIndicator.textContent = " Strong";
+                }
+            });
+
+            function calculatePasswordStrength(password) {
+                if (password.length < 8) {
+                    return "weak";
+                } else if (password.length < 12) {
+                    return "medium";
+                } else {
+                    return "strong";
+                }
+            }
+        });
+
+        
+        $.validator.addMethod("lettersOnly", function(value, element) {
+        return this.optional(element) || /^[A-Za-z]+$/i.test(value);
+        }, "Please enter only alphabetic characters.");
+
+        //$.validator.addMethod("validContNo", function(value, element) {
+        // Check if the contact number is 8 digits long and does not start with zero
+        //return this.optional(element) ||  value[0] !== '0';
+        //}, "Please enter a valid 8-digit contact number that does not start with zero");
+
+        $.validator.addMethod("validUsername", function(value, element) {
+        // Check if the username has no spaces and no uppercase letters
+        return this.optional(element) || !/\s/.test(value) && value === value.toLowerCase();
+        }, "Username should not have spaces or uppercase letters");
+
+        $.validator.addMethod("strongPassword", function(value, element) {
+            // At least 8 characters, one uppercase letter, one lowercase letter, one digit, and one special character
+            return this.optional(element) || /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i.test(value);
+        }, "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character.");
+        
+        $.validator.addMethod("pdfOnly", function(value, element) {
+        return this.optional(element) || /\.(pdf)$/i.test(value);
+        }, "Please upload a PDF file.");
+
         $(document).ready(function() {
             $("#registration_form").validate({
                 rules: {
                     firstname: {
-                        required: true
+                        required: true,
+                        lettersOnly: true
                     },
                     lastname: {
-                        required: true
+                        required: true,
+                        lettersOnly: true
                     },
                     email: {
                         required: true
                     },
                     contno: {
-                        required: true
+                        required: true,
+                        minlength: 10,
+                        maxlength: 10,
+                        number: true
                     },
                     username: {
-                        required: true
+                        required: true,
+                        validUsername: true
                     },
                     password: {
-                        required: true
+                        required: true,
+                        strongPassword: true
                     },
+                    cv: {
+                        required: true,
+                        pdfOnly: true
+                    }
+                },
+                messages: {
+                    contno: {
+                        required: "Please enter a contact number",
+                        validContNo: "Please enter a valid 8-digit contact number that does not start with zero"
+                    },
+                    username: {
+                        required: "Please enter a username",
+                        validUsername: "Username should not have spaces or uppercase letters"
+                    },
+                    password: {
+                        required: "Please enter a password",
+                    },
+                    cv: {
+                        required: "Please upload a file",
+                    }
                 },
                 submitHandler: function(form) {
+                    var firstname = $('#firstname').val();
+                    var lastname = $('#lastname').val();
+                    var email = $('#email').val();
+                    var contno = $('#contno').val();
+                    var username = $('#username').val();
+                    var password = $('#password').val();
+                    var filedata = document.getElementById("cv");
+                    formdata = new FormData();
+                    var file = filedata.files[0];
+                    formdata.append("json", true);
+                    formdata.append("cv", file);
+                    formdata.append("firstname", firstname);
+                    formdata.append("lastname", lastname);
+                    formdata.append("email", email);
+                    formdata.append("contno", contno);
+                    formdata.append("username", username);
+                    formdata.append("password", password);
                         $.ajax({
                             type: "POST",
                             url: "/post",
-                            data: $("#registration_form").serialize(),
-                            success: function(response) {
-                                if(response.code === 200){
-                                    alert("Form submitted . . .");
+                            data: formdata,
+                            processData: false,
+                            contentType: false,
+                            success: function(response)  {
+                                if (response.success == true) {
+                                    alert("Form submitted successfully.");
                                     window.location.reload();
-                                }
-                                else{
-                                    alert(response.message);
-                                    window.location.reload();
+                                } else {
+                                    alert(response.message); // Display the error message from the server
                                 }
                             }
-                        })
-                    }
+                        });
+                }
             });
         });
     </script>
 
+
     <script>
-
-
-
     //---------------------------------------------DELETE-----------------------------//
  
     $(document).on('click', '#delete_id', function() {
@@ -472,11 +707,8 @@
 
                 const password = response.showdata.password
                 $("#update_password").val(password);
-
-                //console.log(a); //
             }
         })
-        //console.log(a); //
     });
 
     
@@ -517,13 +749,70 @@
                             url: "/postupdate",
                             data: $("#update_form").serialize(),
                             success: function() {
-                                alert("form submitted sucessfully");
+                                alert("form updated sucessfully");
                                 window.location.reload();
                             }
                         })
                     }
             });
         });
+
 </script>
+
+<script>
+     //---------------------------------add edu--------------------------//
+
+        $(document).on('click', '#addedu_id', function() {
+        const id = $(this).data('id');
+        $("#addedu_modal").show();
+        $("#addedu_id").val(id);
+    });
+
+    
+    $(".close").on("click", function() {
+        $("#addedu_modal").hide();
+    });
+
+    $(document).ready(function() {
+            $("#addedu_form").validate({
+                rules: {
+                    universityname:{required :true},
+                    degreelevel:{required :true},
+                    year:{required :true}
+                },
+                submitHandler: function(form) {
+                    var addedu_id = $('#addedu_id').val();
+                    var universityname = $('#universityname').val();
+                    var degreename = $('#degreename').val();
+                    var year = $('#year').val();
+                    var filedata = document.getElementById("addedu");
+                    formdata = new FormData();
+                    var file = filedata.files[0];
+                    formdata.append("json", true);
+                    formdata.append("addedu", file);
+                    formdata.append("addedu_id",addedu_id);
+                    formdata.append("universityname", universityname);
+                    formdata.append("degreename", degreename);
+                    formdata.append("year", year);
+                        $.ajax({
+                            type: "POST",
+                            url: "/postaddedu",
+                            data: formdata,
+                            processData: false,
+                            contentType: false,
+                            success: function(response)  {
+                                if (response.success == true) {
+                                    alert("degree uploaded successfully.");
+                                    window.location.reload();
+                                } else {
+                                    alert(response.message); // Display the error message from the server
+                                }
+                            }
+                        });
+                    }
+            });
+        });
+</script>
+
 </body>
 </html>
