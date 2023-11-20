@@ -87,8 +87,8 @@ input[type="password"] {
     <h2>Log in</h2>
     <form id="login_form">
         <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+            <label for="username">Email:</label>
+            <input type="text" id="email" name="email" required>
         </div>
         <div class="form-group">
             <label for="password">Password:</label>
@@ -106,7 +106,7 @@ input[type="password"] {
         $(document).ready(function() {
             $("#login_form").validate({
                 rules: {
-                    username: {
+                    email: {
                         required: true
                     },
                     password: {
@@ -119,8 +119,9 @@ input[type="password"] {
                             url: "/loginpost",
                             data: $("#login_form").serialize(),
                             success: function(response) {
-                                if(response.code === 200){
-                                    window.location.href="http://localhost:5000/registrations"
+                                if(response.code == 200){
+                                    window.location.href=`http://localhost:5000/profile/${response.userid}`
+                                    //window.location.href=`http://localhost:5000/registrations`
                                 }
                                 else{
                                     alert(response.message);

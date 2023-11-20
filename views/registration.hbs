@@ -154,6 +154,32 @@
         margin-left: 5px;
     }
 
+    .remove_field_button,.remove_field_button2 {
+        background-color: #ff0000;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 16px;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        margin-left: 5px;
+    }
+
+    .add_field_button,.add_field_button2 {
+        background-color: #2600ff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 16px;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        margin-left: 5px;
+    }
+
     /* Hover effect for buttons */
     .btn:hover {
         opacity: 0.8;
@@ -195,7 +221,7 @@
         background-color: #fff;
         margin: 15% auto;
         padding: 20px;
-        border: 1px solid #888;
+        border: 10px solid #888;
         width: 50%;
     }
 
@@ -287,6 +313,12 @@
 </head>
 
 <body>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+
+    {{!--------------------------------------BUTTONS------------------------------------------------------}}
     <div class="users-heading1">
     Sample Website
     <span class="users-symbol">&lt;/&gt;</span>
@@ -300,6 +332,7 @@
         <button type="button" id="product_id" class="registration-btn">Products</button>
         </td>
     </div>
+
 
 {{!----------------------------------------------REGISTRATION MODAL-----------------------------------------------}}
 
@@ -338,14 +371,214 @@
                         <label for="cv">Upload CV:</label>
                         <input type="file" id="cv" name="cv">
                     </div>
+                    <div class="input_field_container">
+                        <div class="input_field_wrap">
+                            <label for="Education">Education</label>
+                            <div>
+                                <input type="text" name="degree0" id="degree0" placeholder="degree">
+                                <input type="text" name="board0" id="board0" placeholder="board">
+                                <input type="tel" name="year0" id="year0" placeholder="year">
+                                <input type="tel" name="marks0" id="marks0" placeholder="marks">
+                            </div>
+                            <button class="add_field_button" class="btn btn-primary">Add More</button><br>
+                        </div>
+                    </div>
                     <button type="submit" id="register_btn" class="btn btn-primary">Register</button>
                 </form>
             </div>
         </div>
     </div>
 
+<script>
+    //---------------------------------------------------BUTTONS--------------------------------------------------------//
+    $(document).on('click', '#registration_id', function() {
+    $("#registration_modal").show();
+});
 
-{{!------------------------------------------TABLE-------------------------------------------------}}
+
+$(".close").on("click", function() {
+    $("#registration_modal").hide();
+});
+</script>
+
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+        const passwordInput = document.getElementById("password");
+        const strengthIndicator = document.getElementById("strength");
+
+        passwordInput.addEventListener("input", function () {
+            const password = passwordInput.value;
+            const strength = calculatePasswordStrength(password);
+
+            strengthIndicator.classList.remove("weak", "medium", "strong");
+
+            if (strength === "weak") {
+                strengthIndicator.classList.add("weak");
+                strengthIndicator.textContent = " Weak";
+            } else if (strength === "medium") {
+                strengthIndicator.classList.add("medium");
+                strengthIndicator.textContent = " Medium";
+            } else if (strength === "strong") {
+                strengthIndicator.classList.add("strong");
+                strengthIndicator.textContent = " Strong";
+            }
+        });
+
+        function calculatePasswordStrength(password) {
+            if (password.length < 8) {
+                return "weak";
+            } else if (password.length < 12) {
+                return "medium";
+            } else {
+                return "strong";
+            }
+        }
+    });
+
+    
+    $.validator.addMethod("lettersOnly", function(value, element) {
+    return this.optional(element) || /^[A-Za-z]+$/i.test(value);
+    }, "Please enter only alphabetic characters.");
+
+    $.validator.addMethod("validUsername", function(value, element) {
+    // Check if the username has no spaces and no uppercase letters
+    return this.optional(element) || !/\s/.test(value) && value === value.toLowerCase();
+    }, "Username should not have spaces or uppercase letters");
+
+    $.validator.addMethod("strongPassword", function(value, element) {
+        // At least 8 characters, one uppercase letter, one lowercase letter, one digit, and one special character
+        return this.optional(element) || /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i.test(value);
+    }, "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character.");
+    
+    $.validator.addMethod("pdfOnly", function(value, element) {
+    return this.optional(element) || /\.(pdf)$/i.test(value);
+    }, "Please upload a PDF file.");
+
+$(document).ready(function(){
+    var max_fields = 10;
+
+    var x = 0;
+    $(".add_field_button").click(function(e){
+        e.preventDefault();
+        x++;
+            var html = `<div class="input_field_wrap">
+                <input type="text" name="degree${x}" id="degree${x}" placeholder="degree">
+                <input type="text" name="board${x}" id="board${x}" placeholder="board">
+                <input type="tel" name="year${x}" id="year${x}" placeholder="year">
+                <input type="tel" name="marks${x}" id="marks${x}" placeholder="marks">
+                <button class="remove_field_button">remove</button><br>
+                </div>`
+            $(".input_field_container").append(html);
+    })
+
+    $(".input_field_container").on("click",".remove_field_button", function(e){
+        e.preventDefault();
+        $(this).parent('div').remove();
+    })
+})
+
+$(document).ready(function(){
+    $("#registration_form").validate({
+        rules: {
+            firstname: {
+                required: true,
+                lettersOnly: true
+            },
+            lastname: {
+                required: true,
+                lettersOnly: true
+            },
+            email: {
+                required: true
+            },
+            contno: {
+                required: true,
+                minlength: 10,
+                maxlength: 10,
+                number: true
+            },
+            username: {
+                required: true,
+                validUsername: true
+            },
+            password: {
+                required: true,
+                strongPassword: true
+            },
+            cv: {
+                required: true,
+                pdfOnly: true
+            }
+        },
+        messages: {
+            contno: {
+                required: "Please enter a contact number",
+                validContNo: "Please enter a valid 8-digit contact number that does not start with zero"
+            },
+            username: {
+                required: "Please enter a username",
+                validUsername: "Username should not have spaces or uppercase letters"
+            },
+            password: {
+                required: "Please enter a password",
+            },
+            cv: {
+                required: "Please upload a file",
+            }
+        },
+        submitHandler: function(form){
+            var firstname = $('#firstname').val();
+            var lastname = $('#lastname').val();
+            var email = $('#email').val();
+            var contno = $('#contno').val();
+            var username = $('#username').val();
+            var password = $('#password').val();
+            var filedata = document.getElementById("cv");
+            const formdata = new FormData();
+            var file = filedata.files[0];
+            formdata.append("json", true);
+            formdata.append("cv", file);
+            formdata.append("firstname", firstname);
+            formdata.append("lastname", lastname);
+            formdata.append("email", email);
+            formdata.append("contno", contno);
+            formdata.append("username", username);
+            formdata.append("password", password);
+            let edurow = [];
+            $(".input_field_wrap").each(function (index) {
+                let newedu = {
+                    degree: $(`#degree${index}`).val(),
+                    board: $(`#board${index}`).val(),
+                    year: $(`#year${index}`).val(),
+                    marks: $(`#marks${index}`).val()
+                };
+            edurow.push(newedu);
+            console.log(edurow);
+            });
+
+            formdata.append('edurow',JSON.stringify(edurow));
+
+            $.ajax({
+                type: "POST",
+                url: "/post",
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function(response)  {
+                    if (response.success == true) {
+                        alert("Form submitted successfully.");
+                        window.location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                }
+            });
+        }
+    })
+})
+</script>
+
+{{!-----------------------------------------------------TABLE----------------------------------------------------------------}}
     <div class="container2">
         <table>
             <tr>
@@ -368,290 +601,206 @@
                 <td>
                     <button type="button" id="delete_id" class="delete-btn" data-id="{{this.id}}">Delete</button>
                     <button type="button" id="update_id" class="update-btn" data-id="{{this.id}}">Update</button>
-                    <button type="button" id="addedu_id" class="addedu-btn" data-id="{{this.id}}">Add EDU.</button>
                 </td>
             </tr>
             {{/each}}
         </table>
     </div>
 
-{{!---------------------------------------------------------UPDATE MODAL-------------------------------------------------}}
-<div id="update_modal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Update User</h2>
-        <form id="update_form">
-            <input type="hidden" id="up_id" name="id">
-            <div class="form-group">
-                <label for="update_firstname">First Name:</label>
-                <input type="text" id="update_firstname" name="firstname">
+{{!---------------------------------------------------UPDATE MODAL-------------------------------------------------}}
+    <div class="container1">
+        <div id="update_modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Update User</h2>
+                <form id="update_form">
+                    <input type="hidden" id="up_id" name="up_id">
+                    <div class="form-group">
+                        <label for="update_firstname">First Name:</label>
+                        <input type="text" id="update_firstname" name="update_firstname" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="update_lastname">Last Name:</label>
+                        <input type="text" id="update_lastname" name="update_lastname">
+                    </div>
+                    <div class="form-group">
+                        <label for="update_email">Email:</label>
+                        <input type="email" id="update_email" name="update_email">
+                    </div>
+                    <div class="form-group">
+                        <label for="update_contno">Phone Number:</label>
+                        <input type="text" id="update_contno" name="update_contno">
+                    </div>
+                    <div class="form-group">
+                        <label for="update_username">Username:</label>
+                        <input type="text" id="update_username" name="update_username">
+                    </div>
+                    <div class="form-group">
+                        <label for="update_password">Password:</label>
+                        <input type="password" id="update_password" name="update_password" required>
+                    </div>
+                    <div class="input_field_container2">
+                        <div class="input_field_wrap2">
+                            <label for="Education">Education</label>
+                            
+                            <input type="text" name="update_degree0" id="update_degree0" placeholder="degree">
+                            <input type="text" name="update_board0" id="update_board0" placeholder="board">
+                            <input type="tel" name="update_year0" id="update_year0" placeholder="year">
+                            <input type="tel" name="update_marks0" id="update_marks0" placeholder="marks">
+                            
+                            <button class="add_field_button2" class="btn btn-primary">Add More</button><br>
+                        </div>
+                    </div>
+                    <button type="submit" id="save_changes_btn2" class="btn btn-primary">Save Changes</button>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="update_lastname">Last Name:</label>
-                <input type="text" id="update_lastname" name="lastname">
-            </div>
-            <div class="form-group">
-                <label for="update_email">Email:</label>
-                <input type="email" id="update_email" name="email">
-            </div>
-            <div class="form-group">
-                <label for="update_contno">Phone Number:</label>
-                <input type="text" id="update_contno" name="contno">
-            </div>
-            <div class="form-group">
-                <label for="update_username">Username:</label>
-                <input type="text" id="update_username" name="username">
-            </div>
-            <div class="form-group">
-                <label for="update_password">Password:</label>
-                <input type="password" id="update_password" name="password" required>
-            </div>
-            <button type="submit" id="save_changes_btn" class="btn btn-primary">Save Changes</button>
-        </form>
+        </div>
     </div>
-</div>
 
 
 
+<script>
 
-{{!---------------------------------------------------------ADD EDu. MODAL-------------------------------------------------}}
-<div id="addedu_modal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Add Education</h2>
-        <form id="addedu_form" >
-            <input type="hidden" id="addedu_id" name="addedu_id">
-            <div class="education-section">
-                <label for="university">University Name:</label>
-                <input type="text" name="universityname" id="universityname"><br><br>
-                
-                <label for="degree">Degree:</label>
-                <select name="degreename" id="degreename" required>
-                    <option value="Bachelor's">Bachelor's</option>
-                    <option value="Master's">Master's</option>
-                    <option value="Ph.D.">Ph.D.</option>
-                    <option value="Associate's">Associate's</option>
-                    <option value="Diploma">Diploma</option>
-                </select><br><br>
-                
-                {{!-- <label for="degreeName">Degree Name:</label>
-                <input type="text" name="degree" id="deegree"><br><br> --}}
-                
-                <label for="year">Year:</label>
-                <input type="tel" name="year" id="year"><br><br>
-            </div>
-            <div class="form-group">
-                <label for="addedu">Upload Degree:</label>
-                <input type="file" id="addedu" name="addedu">
-            </div>
-            <button type="submit" id="addedu_btn" class="btn btn-primary">Upload</button>
-        </form>
-    </div>
-</div>
+//------------------------------------------UPDATE-------------------------------------//
+    $(document).ready(function(){
+        var max_fields = 10;
 
+        var x = 0;
+        $(".add_field_button2").click(function(e){
+            e.preventDefault();
+            x++;
+                var html = `<div class="input_field_wrap2">
+                    <input type="text" name="update_degree${x}" id="update_degree${x}" placeholder="degree">
+                    <input type="text" name="update_board${x}" id="update_board${x}" placeholder="board">
+                    <input type="tel" name="update_year${x}" id="update_year${x}" placeholder="year">
+                    <input type="tel" name="update_marks${x}" id="update_marks${x}" placeholder="marks">
+                    <button class="remove_field_button2">remove</button><br>
+                    </div>`
+                $(".input_field_container2").append(html);
+        })
 
+        $(".input_field_container2").on("click",".remove_field_button2", function(e){
+            e.preventDefault();
+            $(this).parent('div').remove();
+        })
+    })
 
+    $(document).on('click', '#update_id', function() {
+        const id = $(this).data('id');
+        $("#update_modal").show();
+        $("#up_id").val(id);
+        $.ajax({
+            type:"POST",
+            url:"/view-details",
+            data:{id},
+            success:function(response){
+                //const a = (response.showdata.createdAt)//
+                const firstname = response.showdata.firstname
+                $("#update_firstname").val(firstname);
 
+                const lastname = response.showdata.lastname
+                $("#update_lastname").val(lastname);
 
+                const email = response.showdata.email
+                $("#update_email").val(email);
 
+                const contno = response.showdata.contno
+                $("#update_contno").val(contno);
 
+                const username = response.showdata.username
+                $("#update_username").val(username);
 
+                const password = response.showdata.password
+                $("#update_password").val(password);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    {{!-- //----------------------------------------------------SCRIPT---------------------------------------------------------------------}}
-
-    
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <script>
-        //---------------------------------------------------REGISTRATION--------------------------------------------------------//
-        $(document).on('click', '#registration_id', function() {
-        $("#registration_modal").show();
+                //for loop for degree
+            }
+        })
     });
 
     
     $(".close").on("click", function() {
-        $("#registration_modal").hide();
+        $("#update_modal").hide();
     });
-    </script>
-
-    {{!-- <script src="C:/Users/User/Desktop/orm_new/views/test.js"></script> --}}
-
-    <script>
-            document.addEventListener("DOMContentLoaded", function () {
-            const passwordInput = document.getElementById("password");
-            const strengthIndicator = document.getElementById("strength");
-
-            passwordInput.addEventListener("input", function () {
-                const password = passwordInput.value;
-                const strength = calculatePasswordStrength(password);
-
-                strengthIndicator.classList.remove("weak", "medium", "strong");
-
-                if (strength === "weak") {
-                    strengthIndicator.classList.add("weak");
-                    strengthIndicator.textContent = " Weak";
-                } else if (strength === "medium") {
-                    strengthIndicator.classList.add("medium");
-                    strengthIndicator.textContent = " Medium";
-                } else if (strength === "strong") {
-                    strengthIndicator.classList.add("strong");
-                    strengthIndicator.textContent = " Strong";
-                }
-            });
-
-            function calculatePasswordStrength(password) {
-                if (password.length < 8) {
-                    return "weak";
-                } else if (password.length < 12) {
-                    return "medium";
-                } else {
-                    return "strong";
-                }
-            }
-        });
-
-        
-        $.validator.addMethod("lettersOnly", function(value, element) {
-        return this.optional(element) || /^[A-Za-z]+$/i.test(value);
-        }, "Please enter only alphabetic characters.");
-
-        //$.validator.addMethod("validContNo", function(value, element) {
-        // Check if the contact number is 8 digits long and does not start with zero
-        //return this.optional(element) ||  value[0] !== '0';
-        //}, "Please enter a valid 8-digit contact number that does not start with zero");
-
-        $.validator.addMethod("validUsername", function(value, element) {
-        // Check if the username has no spaces and no uppercase letters
-        return this.optional(element) || !/\s/.test(value) && value === value.toLowerCase();
-        }, "Username should not have spaces or uppercase letters");
-
-        $.validator.addMethod("strongPassword", function(value, element) {
-            // At least 8 characters, one uppercase letter, one lowercase letter, one digit, and one special character
-            return this.optional(element) || /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/i.test(value);
-        }, "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character.");
-        
-        $.validator.addMethod("pdfOnly", function(value, element) {
-        return this.optional(element) || /\.(pdf)$/i.test(value);
-        }, "Please upload a PDF file.");
-
-        $(document).ready(function() {
-            $("#registration_form").validate({
+    
+    
+    
+    $(document).ready(function() {
+            $("#update_form").validate({
                 rules: {
-                    firstname: {
-                        required: true,
-                        lettersOnly: true
-                    },
-                    lastname: {
-                        required: true,
-                        lettersOnly: true
-                    },
-                    email: {
+                    id:{
                         required: true
                     },
-                    contno: {
-                        required: true,
-                        minlength: 10,
-                        maxlength: 10,
-                        number: true
+                    update_firstname: {
+                        required: true
                     },
-                    username: {
-                        required: true,
-                        validUsername: true
+                     update_lastname: {
+                        required: true
                     },
-                    password: {
-                        required: true,
-                        strongPassword: true
+                     update_email: {
+                        required: true
                     },
-                    cv: {
-                        required: true,
-                        pdfOnly: true
-                    }
-                },
-                messages: {
-                    contno: {
-                        required: "Please enter a contact number",
-                        validContNo: "Please enter a valid 8-digit contact number that does not start with zero"
+                     update_contno: {
+                        required: true
                     },
-                    username: {
-                        required: "Please enter a username",
-                        validUsername: "Username should not have spaces or uppercase letters"
+                     update_username: {
+                        required: true
                     },
-                    password: {
-                        required: "Please enter a password",
+                     update_password: {
+                        required: true
                     },
-                    cv: {
-                        required: "Please upload a file",
-                    }
                 },
                 submitHandler: function(form) {
-                    var firstname = $('#firstname').val();
-                    var lastname = $('#lastname').val();
-                    var email = $('#email').val();
-                    var contno = $('#contno').val();
-                    var username = $('#username').val();
-                    var password = $('#password').val();
-                    var filedata = document.getElementById("cv");
-                    formdata = new FormData();
-                    var file = filedata.files[0];
-                    formdata.append("json", true);
-                    formdata.append("cv", file);
-                    formdata.append("firstname", firstname);
-                    formdata.append("lastname", lastname);
-                    formdata.append("email", email);
-                    formdata.append("contno", contno);
-                    formdata.append("username", username);
-                    formdata.append("password", password);
-                        $.ajax({
-                            type: "POST",
-                            url: "/post",
-                            data: formdata,
-                            processData: false,
-                            contentType: false,
-                            success: function(response)  {
-                                if (response.success == true) {
-                                    alert("Form submitted successfully.");
-                                    window.location.reload();
-                                } else {
-                                    alert(response.message); // Display the error message from the server
-                                }
+                    var id2 = $('#up_id').val();
+                    var firstname = $('#update_firstname').val();
+                    var lastname = $('#update_lastname').val();
+                    var email = $('#update_email').val();
+                    var contno = $('#update_contno').val();
+                    var username = $('#update_username').val();
+                    var password = $('#update_password').val();
+                    
+                    let edurow2 = [];
+                    
+                    $(".input_field_wrap2").each(function (index) {
+                        
+                        let newedu2 = {
+                            degree: $(`#update_degree${index}`).val(),
+                            board: $(`#update_board${index}`).val(),
+                            year: $(`#update_year${index}`).val(),
+                            marks: $(`#update_marks${index}`).val()
+                        };
+                    edurow2.push(newedu2);
+                    });
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: "/postupdate",
+                        data: {
+                            up_id:id2,
+                            update_firstname: firstname,
+                            update_lastname:lastname,
+                            update_email:email,
+                            update_contno:contno,
+                            update_username:username,
+                            update_password:password,
+                            edurow:JSON.stringify(edurow2)
+                        },
+                        success: function(response)  {
+                            if (response.success == true) {
+                                alert("User updated successfully.");
+                                window.location.reload();
+                            } else {
+                                alert(response.message);
                             }
-                        });
+                        }
+                    })
                 }
             });
         });
-    </script>
 
+</script>
 
-    <script>
+<script>
     //---------------------------------------------DELETE-----------------------------//
  
     $(document).on('click', '#delete_id', function() {
@@ -670,148 +819,6 @@
             }
         });
     });
-
-
-
-
-
-
-
-//------------------------------------------UPDATE-------------------------------------//
-    
-    $(document).on('click', '#update_id', function() {
-        const id = $(this).data('id');
-        $("#update_modal").show();
-        $("#up_id").val(id);
-        //console.log($("#up_id").val());
-        $.ajax({
-            type:"POST",
-            url:"/view-details",
-            data:{id},
-            success:function(response){
-                //const a = (response.showdata.createdAt)//
-                const firstname = response.showdata.firstname//
-                $("#update_firstname").val(firstname);
-
-                const lastname = response.showdata.lastname
-                $("#update_lastname").val(lastname);
-
-                const email = response.showdata.email
-                $("#update_email").val(email);
-
-                const contno = response.showdata.contno
-                $("#update_contno").val(contno);
-
-                const username = response.showdata.username
-                $("#update_username").val(username);
-
-                const password = response.showdata.password
-                $("#update_password").val(password);
-            }
-        })
-    });
-
-    
-    $(".close").on("click", function() {
-        $("#update_modal").hide();
-    });
-    
-    
-
-    $(document).ready(function() {
-            $("#update_form").validate({
-                rules: {
-                    id:{
-                        required: true
-                    },
-                    firstname: {
-                        required: true
-                    },
-                    lastname: {
-                        required: true
-                    },
-                    email: {
-                        required: true
-                    },
-                    contno: {
-                        required: true
-                    },
-                    username: {
-                        required: true
-                    },
-                    password: {
-                        required: true
-                    },
-                },
-                submitHandler: function(form) {
-                        $.ajax({
-                            type: "POST",
-                            url: "/postupdate",
-                            data: $("#update_form").serialize(),
-                            success: function() {
-                                alert("form updated sucessfully");
-                                window.location.reload();
-                            }
-                        })
-                    }
-            });
-        });
-
-</script>
-
-<script>
-     //---------------------------------add edu--------------------------//
-
-        $(document).on('click', '#addedu_id', function() {
-        const id = $(this).data('id');
-        $("#addedu_modal").show();
-        $("#addedu_id").val(id);
-    });
-
-    
-    $(".close").on("click", function() {
-        $("#addedu_modal").hide();
-    });
-
-    $(document).ready(function() {
-            $("#addedu_form").validate({
-                rules: {
-                    universityname:{required :true},
-                    degreelevel:{required :true},
-                    year:{required :true}
-                },
-                submitHandler: function(form) {
-                    var addedu_id = $('#addedu_id').val();
-                    var universityname = $('#universityname').val();
-                    var degreename = $('#degreename').val();
-                    var year = $('#year').val();
-                    var filedata = document.getElementById("addedu");
-                    formdata = new FormData();
-                    var file = filedata.files[0];
-                    formdata.append("json", true);
-                    formdata.append("addedu", file);
-                    formdata.append("addedu_id",addedu_id);
-                    formdata.append("universityname", universityname);
-                    formdata.append("degreename", degreename);
-                    formdata.append("year", year);
-                        $.ajax({
-                            type: "POST",
-                            url: "/postaddedu",
-                            data: formdata,
-                            processData: false,
-                            contentType: false,
-                            success: function(response)  {
-                                if (response.success == true) {
-                                    alert("degree uploaded successfully.");
-                                    window.location.reload();
-                                } else {
-                                    alert(response.message); // Display the error message from the server
-                                }
-                            }
-                        });
-                    }
-            });
-        });
 </script>
 
 </body>

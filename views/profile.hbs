@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .profile-container {
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .profile-picture {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto;
+            background-color: #3498db;
+            color: #fff;
+            text-align: center;
+            line-height: 100px;
+            font-size: 36px;
+        }
+        .profile-info {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .profile-info p {
+            margin: 10px 0;
+        }
+        .edit-btn {
+            background-color: #3498db;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .edit-btn:hover {
+            background-color: #2980b9;
+        }
+        .info-btn {
+            background-color: #e6a822;
+            color: #fff;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .info-btn:hover {
+            background-color: #d35400;
+        }
+
+        .buy-btn,
+        .sell-btn {
+            background-color: #db3434;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            position: fixed;
+            bottom: 10px;
+        }
+
+        .buy-btn {
+            left: 10px;
+        }
+
+        .sell-btn {
+            right: 10px;
+        }
+
+        .buy-btn:hover,
+        .sell-btn:hover {
+            background-color: #29b94d;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-picture">{{userfind.username}}</div>
+        <div class="profile-info">
+            <p>ID: <input type="text" id="profile_id" value="{{userfind.id}}" readonly></p>
+            <p>First Name: <input type="text" id="profile_firstname" value="{{userfind.firstname}}" readonly> <button class="edit-btn" data-field="firstname">Edit</button></p>
+            <p>Last Name: <input type="text" id="profile_lastname" value="{{userfind.lastname}}" readonly> <button class="edit-btn" data-field="lastname">Edit</button></p>
+            <p>Email: <input type="email" id="profile_email" value="{{userfind.email}}" readonly> <button class="edit-btn" data-field="email">Edit</button></p>
+            <p>Phone Number: <input type="text" id="profile_contno" value="{{userfind.contno}}" readonly> <button class="edit-btn" data-field="contno">Edit</button></p>
+            <p>Username: <input type="text" id="profile_username" value="{{userfind.username}}" readonly> <button class="edit-btn" data-field="username">Edit</button></p>
+            <button type="button" id="info_id" class="info-btn" data-id="{{userfind.id}}">Save</button>
+        </div>
+    </div>
+
+    <button type="button" class="buy-btn">Buy</button>
+
+    <button type="button" class="sell-btn">Sell</button>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+
+    <script>
+        
+        $(document).on('click', '.edit-btn', function() {
+            const fieldToEdit = $(this).data('field');
+            const inputField = $(`#profile_${fieldToEdit}`);
+            inputField.prop('readonly', false).focus(); 
+            $(this).replaceWith(`<button class="save-btn" data-field="${fieldToEdit}">Save</button>`);
+        });
+
+        $(document).on('click', '.save-btn', function() {
+            const fieldToEdit = $(this).data('field');
+            const inputField = $(`#profile_${fieldToEdit}`);
+            const updatedValue = inputField.val();
+            inputField.prop('readonly', true);
+            $(this).replaceWith(`<button class="edit-btn" data-field="${fieldToEdit}">Edit</button>`);
+        });
+
+        $(document).on('blur', 'input[type="text"], input[type="email"]', function() {
+            const fieldToEdit = $(this).attr('id').replace('profile_', '');
+            const updatedValue = $(this).val();
+            $(this).prop('readonly', true);
+            $(`.save-btn[data-field="${fieldToEdit}"]`).replaceWith(`<button class="edit-btn" data-field="${fieldToEdit}">Edit</button>`);
+        });
+    </script>
+
+    <script>
+    $(document).on('click', '#info_id', function() {
+
+                    var id = $('#profile_id').val();
+                    var firstname = $('#profile_firstname').val();
+                    var lastname = $('#profile_lastname').val();
+                    var email = $('#profile_email').val();
+                    var contno = $('#profile_contno').val();
+                    var username = $('#profile_username').val();
+                    console.log("Rohan")
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/postupdate",
+                        data: {
+                            up_id:id,
+                            update_firstname: firstname,
+                            update_lastname:lastname,
+                            update_email: email,
+                            update_contno:contno,
+                            update_username: username
+                            },
+                        success: function(response)  {
+                            if (response.success == true) {
+                                alert("User updated successfully.");
+                            } else {
+                                alert(response.message);
+                            }
+                        }
+                    })
+                }
+            );
+    </script>
+</body>
+</html>
